@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    loglevel: info
+  jaeger:
+    endpoint: jaeger-ui:14250
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporter: [logging, jaeger]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporter: [logging] # Can be configured for Prometheus/Jaeger backend as needed
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporter: [logging]
